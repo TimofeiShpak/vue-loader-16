@@ -57,9 +57,12 @@ function loader(source) {
         .relative(rootContext || process.cwd(), filename)
         .replace(/^(\.\.[\/\\])+/, '');
     const shortFilePath = rawShortFilePath.replace(/\\/g, '/');
-    const id = hash(isProduction
-        ? shortFilePath + '\n' + source.replace(/\r\n/g, '\n')
-        : shortFilePath);
+    const id = hash(
+        (isProduction
+            ? (shortFilePath + '\n' + source.replace(/\r\n/g, '\n'))
+            : shortFilePath) + 
+            (options.scopeIdHashSalt || '')
+        )
     // if the query has a type field, this is a language block request
     // e.g. foo.vue?type=template&id=xxxxx
     // and we will return early
